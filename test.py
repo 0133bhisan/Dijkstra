@@ -4,26 +4,27 @@ from pq import Pq
 import copy
 import time
 
-# user interface (sort of)
+
 def main():
     adj,h=prep()
 
-    v0=int(input("Choose a starting point :"))-1
-    v1=int(input("Choose1 an ending point :"))-1
-    ver= int(input("Press 1 to do One directional dijkstra, 2 to do two directional : "))
+    v0=int(input("Choose a starting point "))-1
+    v1=int(input("Choose1 an ending point "))-1
+    ver= int(input("Press 1 to do One directional dijkstra, 2 to do two directional :"))
     counter=0
     if ver==1:
         counter=doDijkstra1(adj,h,v0,v1,0)
     elif ver==2:
         counter=doDijkstra2(adj,h,v0,v1,0)
-    
     print(counter,' : nodes visited')
 
-    q=int(input(" Enter 1 to run this program again :"))
+    q=int(input(" Enter 1 to do it again :"))
     if q==1:
         main()
+    else:
+        quit()
 
-# create adjacencylist and hastable        
+        
 def prep():
     f=open("ny.gr","r")
     numVertex=0
@@ -39,7 +40,7 @@ def prep():
     f.close()
     return adj,h
     
-# One way dijkstra
+    
 def doDijkstra1(adj,h,v0,v1,counter):
     start=time.time()
     modifyHash(h,v0,'en',0,None)
@@ -70,8 +71,7 @@ def doDijkstra1(adj,h,v0,v1,counter):
     printPath1(h,h[v1][1])
     return counter
 
-#takes in adj,h and q. processes the extractedMin until it is done. Returns 'done' v
-def workOnMin(adj,h0,h1,queue,best,counter): 
+def workOnMin(adj,h0,h1,queue,best,counter): #takes in adj,h and q. processes the extractedMin until it is done. Returns 'done' v
     v=queue.extractMin()
     if h1[v.label][2]=='done':
         if best==None:
@@ -108,7 +108,6 @@ def copyH(h0):
     for i in range(len(h1)):
         h1[i][1]=h0[i][1]       #so that both hashtables are pointing to the same objects to keep things simple
     return h1
-
 def printPath1(h0,destination):
     if destination==None:
         return
@@ -125,8 +124,7 @@ def printPath3(h1,destination):
         return
     print(destination.label+1)
     printPath3(h1,h1[destination.label][4])
-
-#Bidirectional Dijkstra    
+    
 def doDijkstra2(adj,h0,v0,v1,counter):
     h1=copyH(h0)
     q0=Pq([],h0)
@@ -160,7 +158,7 @@ def doDijkstra2(adj,h0,v0,v1,counter):
     printPath2(h0,h1,best,h1[v1][1])
     return counter
 
-# Helping functions            
+            
 def modifyHash(h,index,s,d,v):
     h[index][2]=s
     h[index][3]=d
@@ -170,7 +168,7 @@ def createHash(n):
     h=[]
     for i in range(n):
         v=Vertex(i)
-        h.append([i,v,'un',-111,None]) #index of node,Vertex obj,State,dist,via, index in 
+        h.append([i,v,'un',-111,None])#index of node,Vertex obj,State,dist,via, index in 
     return h
 
 def createAdjList(n,h):
@@ -184,6 +182,6 @@ def modifyAdjList(d,adj,h):
     to=int(d[2])
     length=int(d[3])
     adj[h[frm-1][1]][h[to-1][1]]=length
-
+#just edited
 if __name__=='__main__':
     main()
